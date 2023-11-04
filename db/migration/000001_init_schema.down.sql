@@ -1,0 +1,6 @@
+DROP TABLE IF EXISTS rental_agreement;
+DROP TABLE IF EXISTS renter;
+DROP TABLE IF EXISTS rental_unit;
+DROP TABLE IF EXISTS house;
+DROP TYPE IF EXISTS HouseKind;
+DROP TYPE IF EXISTS RentalStatus;
