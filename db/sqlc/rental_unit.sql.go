@@ -67,7 +67,7 @@ func (q *Queries) DeleteRentalUnitsByHouse(ctx context.Context, houseID int32) (
 		return nil, err
 	}
 	defer rows.Close()
-	var items []int32
+	items := []int32{}
 	for rows.Next() {
 		var id int32
 		if err := rows.Scan(&id); err != nil {
@@ -121,7 +121,7 @@ func (q *Queries) GetRentalUnitsByHouse(ctx context.Context, arg GetRentalUnitsB
 		return nil, err
 	}
 	defer rows.Close()
-	var items []RentalUnit
+	items := []RentalUnit{}
 	for rows.Next() {
 		var i RentalUnit
 		if err := rows.Scan(

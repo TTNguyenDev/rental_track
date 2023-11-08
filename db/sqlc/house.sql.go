@@ -97,7 +97,7 @@ func (q *Queries) GetHouses(ctx context.Context, arg GetHousesParams) ([]House, 
 		return nil, err
 	}
 	defer rows.Close()
-	var items []House
+	items := []House{}
 	for rows.Next() {
 		var i House
 		if err := rows.Scan(

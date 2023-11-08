@@ -137,7 +137,7 @@ func (q *Queries) GetRentalAgreementsByRenter(ctx context.Context, arg GetRental
 		return nil, err
 	}
 	defer rows.Close()
-	var items []RentalAgreement
+	items := []RentalAgreement{}
 	for rows.Next() {
 		var i RentalAgreement
 		if err := rows.Scan(

@@ -67,7 +67,7 @@ func (q *Queries) GetRenters(ctx context.Context, arg GetRentersParams) ([]Rente
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Renter
+	items := []Renter{}
 	for rows.Next() {
 		var i Renter
 		if err := rows.Scan(&i.ID, &i.FullName); err != nil {
