@@ -35,8 +35,8 @@ CREATE TABLE "rental_agreement" (
   "renter_id" INT NOT NULL,
   "rental_id" INT NOT NULL,
   "start_date" DATE NOT NULL,
-  "end_date" DATE,
-  "price" NUMERIC(10,2),
+  "end_date" DATE NOT NULL,
+  "price" NUMERIC(10,2) NOT NULL,
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT (CURRENT_TIMESTAMP)
 );
 

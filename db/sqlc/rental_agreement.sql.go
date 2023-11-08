@@ -5,7 +5,6 @@ package db
 
 import (
 	"context"
-	"database/sql"
 	"time"
 )
 
@@ -22,11 +21,11 @@ $1, $2, $3, $4, $5
 `
 
 type CreateRentalAgreementParams struct {
-	RenterID  int32          `json:"renter_id"`
-	RentalID  int32          `json:"rental_id"`
-	StartDate time.Time      `json:"start_date"`
-	EndDate   sql.NullTime   `json:"end_date"`
-	Price     sql.NullString `json:"price"`
+	RenterID  int32     `json:"renter_id"`
+	RentalID  int32     `json:"rental_id"`
+	StartDate time.Time `json:"start_date"`
+	EndDate   time.Time `json:"end_date"`
+	Price     string    `json:"price"`
 }
 
 func (q *Queries) CreateRentalAgreement(ctx context.Context, arg CreateRentalAgreementParams) (RentalAgreement, error) {
@@ -79,8 +78,8 @@ RETURNING id, renter_id, rental_id, start_date, end_date, price, created_at
 `
 
 type ExtendRentalAgreementParams struct {
-	EndDate sql.NullTime `json:"end_date"`
-	ID      int32        `json:"id"`
+	EndDate time.Time `json:"end_date"`
+	ID      int32     `json:"id"`
 }
 
 func (q *Queries) ExtendRentalAgreement(ctx context.Context, arg ExtendRentalAgreementParams) (RentalAgreement, error) {

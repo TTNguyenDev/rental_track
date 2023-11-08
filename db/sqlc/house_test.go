@@ -2,7 +2,9 @@ package db
 
 import (
 	"context"
-	"math/rand"
+	"crypto/rand"
+	"math/big"
+	"strconv"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -100,12 +102,27 @@ func RandomAddress() string {
 	return util.RandomString(100)
 }
 
-func RandomPrice() int64 {
-	return util.RandomInt(0, 1000)
+func RandomPrice() string {
+	return strconv.FormatInt(int64(util.RandomInt(0, 1000)), 10)
 }
 
 func RandomHouseKind() Housekind {
 	kinds := []Housekind{HousekindHouse, HousekindRooms}
-	n := len(kinds)
-	return kinds[rand.Intn(n)]
+	n := int64(len(kinds))
+	randomNumber, err := rand.Int(rand.Reader, big.NewInt(n))
+	if err != nil {
+		panic(err)
+	}
+	return kinds[randomNumber.Int64()]
+}
+
+func RandomRentalStatus() Rentalstatus {
+	statuses := []Rentalstatus{RentalstatusRented, RentalstatusEmpty}
+	n := int64(len(statuses))
+
+	randomNumber, err := rand.Int(rand.Reader, big.NewInt(n))
+	if err != nil {
+		panic(err)
+	}
+	return statuses[randomNumber.Int64()]
 }

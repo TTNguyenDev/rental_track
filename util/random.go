@@ -1,28 +1,45 @@
 package util
 
 import (
-	"math/rand"
+	"crypto/rand"
+	"fmt"
+	"math/big"
 	"strings"
-	"time"
 )
 
 const alphabet = "abcdefghijklmnopqrstuvwxyz"
 
 func init() {
-	rand.Seed(time.Now().UnixNano())
 }
 
 func RandomString(n int) string {
 	var sb strings.Builder
-	k := len(alphabet)
+	k := big.NewInt(int64(len(alphabet)))
 
 	for i := 0; i < n; i++ {
-		c := alphabet[rand.Intn(k)]
-		sb.WriteByte(c)
+		bi, err := rand.Int(rand.Reader, k)
+		if err != nil {
+			panic(err) // return the error to handle it properly
+		}
+		sb.WriteByte(alphabet[bi.Int64()])
 	}
 	return sb.String()
 }
 
 func RandomInt(min, max int64) int64 {
-	return min + rand.Int63n(max-min+1)
+	if min > max {
+		panic(fmt.Errorf("invalid range: %d > %d", min, max))
+	}
+	delta := max - min
+
+	// The range of the random numbers (delta + 1) is passed to rand.Int
+	// The big.NewInt function converts delta to *big.Int
+	// rand.Int returns a random number n such that 0 <= n < delta
+	nBig, err := rand.Int(rand.Reader, big.NewInt(delta+1))
+	if err != nil {
+		panic(err)
+	}
+
+	// Convert big.Int to int64 and add the minimum value
+	return min + nBig.Int64()
 }

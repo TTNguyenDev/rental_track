@@ -56,13 +56,13 @@ type House struct {
 }
 
 type RentalAgreement struct {
-	ID        int32          `json:"id"`
-	RenterID  int32          `json:"renter_id"`
-	RentalID  int32          `json:"rental_id"`
-	StartDate time.Time      `json:"start_date"`
-	EndDate   sql.NullTime   `json:"end_date"`
-	Price     sql.NullString `json:"price"`
-	CreatedAt time.Time      `json:"created_at"`
+	ID        int32     `json:"id"`
+	RenterID  int32     `json:"renter_id"`
+	RentalID  int32     `json:"rental_id"`
+	StartDate time.Time `json:"start_date"`
+	EndDate   time.Time `json:"end_date"`
+	Price     string    `json:"price"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 type RentalUnit struct {
