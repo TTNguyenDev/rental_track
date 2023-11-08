@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
 	db "github.com/TTNguyenDev/rental_track/db/sqlc"
@@ -14,6 +15,7 @@ type Server struct {
 func NewServer(store *db.Store) *Server {
 	server := &Server{store: store}
 	router := gin.Default()
+	router.Use(cors.Default())
 
 	// TODO: add routes to router
 	router.POST("/house", server.createHouse)
