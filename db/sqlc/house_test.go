@@ -12,15 +12,9 @@ import (
 	"github.com/TTNguyenDev/rental_track/util"
 )
 
-func TestCreateHouse(t *testing.T) House {
-	arg := CreateHouseParams{
-		Name:    RandomName(),
-		Address: RandomAddress(),
-		Kind:    HousekindRooms,
-	}
-
-	house, err := testQueries.CreateHouse(context.Background(), arg)
-	require.NoError(t, err)
+func TestCreateHouse(t *testing.T) {
+	arg := GetRandomCreateHouseParams()
+	house := CreateHouseForTest(arg)
 	require.NotEmpty(t, house)
 
 	require.Equal(t, arg.Name, house.Name)
@@ -29,11 +23,11 @@ func TestCreateHouse(t *testing.T) House {
 
 	require.NotZero(t, house.ID)
 	require.NotZero(t, house.CreatedAt)
-	return house
 }
 
 func TestDeleteHouse(t *testing.T) {
-	createdHouse := TestCreateHouse(t)
+	arg := GetRandomCreateHouseParams()
+	createdHouse := CreateHouseForTest(arg)
 
 	house, err := testQueries.DeleteHouse(context.Background(), createdHouse.ID)
 	require.NoError(t, err)
@@ -43,7 +37,8 @@ func TestDeleteHouse(t *testing.T) {
 }
 
 func TestGetHouse(t *testing.T) {
-	createdHouse := TestCreateHouse(t)
+	arg := GetRandomCreateHouseParams()
+	createdHouse := CreateHouseForTest(arg)
 
 	house, err := testQueries.GetHouse(context.Background(), createdHouse.ID)
 	require.NoError(t, err)
@@ -58,7 +53,10 @@ func TestGetHouse(t *testing.T) {
 
 func TestGetHouses(t *testing.T) {
 	// TODO: Delete all houses
-	createdHouses := []House{TestCreateHouse(t), TestCreateHouse(t)}
+
+	arg1 := GetRandomCreateHouseParams()
+	arg2 := GetRandomCreateHouseParams()
+	createdHouses := []House{CreateHouseForTest(arg1), CreateHouseForTest(arg2)}
 
 	arg := GetHousesParams{
 		Limit:  10,
@@ -77,7 +75,8 @@ func TestGetHouses(t *testing.T) {
 }
 
 func TestUpdateHouse(t *testing.T) {
-	createdHouse := TestCreateHouse(t)
+	_arg := GetRandomCreateHouseParams()
+	createdHouse := CreateHouseForTest(_arg)
 
 	arg := UpdateHouseInfoParams{
 		Name:    RandomName(),
@@ -94,6 +93,23 @@ func TestUpdateHouse(t *testing.T) {
 }
 
 // Util
+func CreateHouseForTest(arg CreateHouseParams) House {
+	house, err := testQueries.CreateHouse(context.Background(), arg)
+	if err != nil {
+		panic(err)
+	}
+	return house
+}
+
+func GetRandomCreateHouseParams() CreateHouseParams {
+	arg := CreateHouseParams{
+		Name:    RandomName(),
+		Address: RandomAddress(),
+		Kind:    HousekindRooms,
+	}
+	return arg
+}
+
 func RandomName() string {
 	return util.RandomString(6)
 }

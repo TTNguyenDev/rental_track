@@ -7,16 +7,30 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestCreateRentalUnit(t *testing.T) RentalUnit {
-	createdHouse := TestCreateHouse(t)
+func createRentalUnitForTest(arg CreateRentalUnitParams) RentalUnit {
+	rentalUnit, err := testQueries.CreateRentalUnit(context.Background(), arg)
+	if err != nil {
+		panic(err)
+	}
+	return rentalUnit
+}
+
+func TestCreateRentalUnit(t *testing.T) {
+	houseArg := CreateHouseParams{
+		Name:    RandomName(),
+		Address: RandomAddress(),
+		Kind:    HousekindRooms,
+	}
+
+	createdHouse := CreateHouseForTest(houseArg)
+
 	arg := CreateRentalUnitParams{
 		HouseID: createdHouse.ID,
 		Price:   RandomPrice(),
-		Status:  RandomRentalStatus(),
+		Status:  RentalstatusEmpty,
 	}
 
-	rentalUnit, err := testQueries.CreateRentalUnit(context.Background(), arg)
-	require.NoError(t, err)
+	rentalUnit := createRentalUnitForTest(arg)
 	require.NotEmpty(t, rentalUnit)
 
 	require.Equal(t, arg.HouseID, rentalUnit.HouseID)
@@ -25,11 +39,22 @@ func TestCreateRentalUnit(t *testing.T) RentalUnit {
 
 	require.NotZero(t, rentalUnit.ID)
 	require.NotZero(t, rentalUnit.UpdatedAt)
-	return rentalUnit
 }
 
 func TestDeleteRentalUnit(t *testing.T) {
-	createdRentalUnit := TestCreateRentalUnit(t)
+	houseArg := CreateHouseParams{
+		Name:    RandomName(),
+		Address: RandomAddress(),
+		Kind:    HousekindRooms,
+	}
+
+	createdHouse := CreateHouseForTest(houseArg)
+	arg := CreateRentalUnitParams{
+		HouseID: createdHouse.ID,
+		Price:   RandomPrice(),
+		Status:  RentalstatusEmpty,
+	}
+	createdRentalUnit := createRentalUnitForTest(arg)
 
 	rentalUnit, err := testQueries.DeleteRentalUnit(context.Background(), createdRentalUnit.ID)
 	require.NoError(t, err)
@@ -39,7 +64,19 @@ func TestDeleteRentalUnit(t *testing.T) {
 }
 
 func TestGetRentalUnit(t *testing.T) {
-	createdRentalUnit := TestCreateRentalUnit(t)
+	houseArg := CreateHouseParams{
+		Name:    RandomName(),
+		Address: RandomAddress(),
+		Kind:    HousekindRooms,
+	}
+
+	createdHouse := CreateHouseForTest(houseArg)
+	arg := CreateRentalUnitParams{
+		HouseID: createdHouse.ID,
+		Price:   RandomPrice(),
+		Status:  RentalstatusEmpty,
+	}
+	createdRentalUnit := createRentalUnitForTest(arg)
 
 	rentalUnit, err := testQueries.GetRentalUnit(context.Background(), createdRentalUnit.ID)
 	require.NoError(t, err)
@@ -78,7 +115,19 @@ func TestGetRentalUnits(t *testing.T) {
 }
 
 func TestUpdateRentalUnit(t *testing.T) {
-	createdHouse := TestCreateHouse(t)
+	houseArg := CreateHouseParams{
+		Name:    RandomName(),
+		Address: RandomAddress(),
+		Kind:    HousekindRooms,
+	}
+
+	createdHouse := CreateHouseForTest(houseArg)
+	rentalUnitArg := CreateRentalUnitParams{
+		HouseID: createdHouse.ID,
+		Price:   RandomPrice(),
+		Status:  RentalstatusEmpty,
+	}
+	createRentalUnitForTest(rentalUnitArg)
 
 	arg := UpdateRentalUnitParams{
 		ID:     createdHouse.ID,

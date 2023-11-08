@@ -7,20 +7,27 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestCreateRenter(t *testing.T) Renter {
-	arg := RandomName()
+func CreateReneterForTest(arg string) Renter {
 	renter, err := testQueries.CreateRenter(context.Background(), arg)
-	require.NoError(t, err)
+	if err != nil {
+		panic(err)
+	}
+	return renter
+}
+
+func TestCreateRenter(t *testing.T) {
+	arg := RandomName()
+	renter := CreateReneterForTest(arg)
 	require.NotEmpty(t, renter)
 
 	require.Equal(t, arg, renter.FullName)
 
 	require.NotZero(t, renter.ID)
-	return renter
 }
 
 func TestDeleteRenter(t *testing.T) {
-	createdRenter := TestCreateRenter(t)
+	arg := RandomName()
+	createdRenter := CreateReneterForTest(arg)
 
 	renter, err := testQueries.DeleteRenter(context.Background(), createdRenter.ID)
 	require.NoError(t, err)
@@ -30,7 +37,8 @@ func TestDeleteRenter(t *testing.T) {
 }
 
 func TestGetRenter(t *testing.T) {
-	createdRenter := TestCreateRenter(t)
+	arg := RandomName()
+	createdRenter := CreateReneterForTest(arg)
 
 	renter, err := testQueries.GetRenter(context.Background(), createdRenter.ID)
 	require.NoError(t, err)
@@ -42,7 +50,10 @@ func TestGetRenter(t *testing.T) {
 
 func TestGetRenters(t *testing.T) {
 	// TODO: Delete all houses
-	createdRenters := []Renter{TestCreateRenter(t), TestCreateRenter(t)}
+	createdRenters := []Renter{
+		CreateReneterForTest(RandomName()),
+		CreateReneterForTest(RandomName()),
+	}
 
 	arg := GetRentersParams{
 		Limit:  10,
