@@ -15,8 +15,8 @@ WHERE id = $1 LIMIT 1;
 SELECT * FROM rental_unit 
 WHERE house_id = $1
 ORDER BY price
-LIMIT $1
-OFFSET $2;
+LIMIT $2
+OFFSET $3;
 
 -- name: UpdateRentalUnit :one
 UPDATE rental_unit

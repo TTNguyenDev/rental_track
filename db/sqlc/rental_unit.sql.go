@@ -106,17 +106,18 @@ const getRentalUnitsByHouse = `-- name: GetRentalUnitsByHouse :many
 SELECT id, house_id, price, status, updated_at FROM rental_unit 
 WHERE house_id = $1
 ORDER BY price
-LIMIT $1
-OFFSET $2
+LIMIT $2
+OFFSET $3
 `
 
 type GetRentalUnitsByHouseParams struct {
-	Limit  int32 `json:"limit"`
-	Offset int32 `json:"offset"`
+	HouseID int32 `json:"house_id"`
+	Limit   int32 `json:"limit"`
+	Offset  int32 `json:"offset"`
 }
 
 func (q *Queries) GetRentalUnitsByHouse(ctx context.Context, arg GetRentalUnitsByHouseParams) ([]RentalUnit, error) {
-	rows, err := q.db.QueryContext(ctx, getRentalUnitsByHouse, arg.Limit, arg.Offset)
+	rows, err := q.db.QueryContext(ctx, getRentalUnitsByHouse, arg.HouseID, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}

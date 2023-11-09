@@ -17,10 +17,27 @@ func NewServer(store *db.Store) *Server {
 	router := gin.Default()
 	router.Use(cors.Default())
 
-	// TODO: add routes to router
+	// Admins
+
+	// House
 	router.POST("/house", server.createHouse)
 	router.GET("/house/:id", server.getHouse)
 	router.GET("/houses", server.getHouses)
+
+	// Rental Unit
+	router.POST("/rentalunit", server.createRentalUnit)
+	router.GET("/rentalunit/:id", server.getRentalUnit)
+	router.GET("/rentalunitsByHouse", server.getRentalUnitsByHouse)
+
+	// Renter
+	router.POST("/renter", server.createRenter)
+	router.GET("/renter/:id", server.getRenter)
+	router.GET("/renters", server.getRenters)
+
+	// Rental Agreement
+	router.POST("/rentalAgreement", server.createRentalAgreement)
+	router.GET("/rentalAgreement/:id", server.getRentalAgreement)
+	router.GET("/rentalAgreements", server.getRentalAgreementsByRenter)
 
 	server.router = router
 	return server
