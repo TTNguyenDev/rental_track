@@ -62,9 +62,9 @@ func (server *Server) getRentalUnit(ctx *gin.Context) {
 }
 
 type getRentalUnitsByHouseRequest struct {
-	HouseID  int32 `json:"house_id" binding:"required"`
-	PageID   int32 `                binding:"required,min=1"        form:"page_id"`
-	PageSize int32 `                binding:"required,min=5,max=10" form:"page_size"`
+	HouseID  int32 `form:"house_id"  binding:"required"`
+	PageID   int32 `form:"page_id"   binding:"required,min=1"`
+	PageSize int32 `form:"page_size" binding:"required,min=5,max=10"`
 }
 
 func (server *Server) getRentalUnitsByHouse(ctx *gin.Context) {
