@@ -43,7 +43,7 @@ type getHouseRequest struct {
 
 func (server *Server) getHouse(ctx *gin.Context) {
 	var req getHouseRequest
-	if err := ctx.ShouldBind(&req); err != nil {
+	if err := ctx.ShouldBindUri(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
